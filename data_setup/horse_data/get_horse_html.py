@@ -15,12 +15,12 @@ import codecs
 import time
 import os
 from os import path
-OWN_FILE_NAME = path.splitext(path.basename('\\Users\\vmlab\\win5.ext'))[0]
+# OWN_FILE_NAME = path.splitext(path.basename('\\Users\\vmlab\\win5.ext'))[0]
 HORSE_URL_DIR = "horse_url"
 HORSE_HTML_DIR = "horse_html"
 
-import logging
-logger = logging.getLogger('get_horse_html') #ファイルの名前を渡す
+# import logging
+# logger = logging.getLogger('get_horse_html') #ファイルの名前を渡す
 
 proxies_dic = {
     "http": "http://proxy.example.co.jp:8080",
@@ -48,9 +48,9 @@ def get_horse_html():
         get_horse_html_split(i)
 
 def get_horse_html_split(i):
-    with open(HORSE_URL_DIR+"/"+ "horse_" + str(i) +".txt", "r") as f:
+    with open("../data/" + HORSE_URL_DIR+"/"+ "horse_" + str(i) +".txt", "r") as f:
         global save_dir
-        save_dir = HORSE_HTML_DIR+"/"+ "horse_" + str(i)
+        save_dir = "../data/" + HORSE_HTML_DIR+"/"+ "horse_" + str(i)
         my_makedirs(save_dir)
         urls = f.read().splitlines()
 
@@ -109,9 +109,9 @@ def write_html(url):
         with codecs.open(save_file_path, 'w', 'utf-8') as file:
             file.write(html)
 
-if __name__ == '__main__':
-    formatter = "%(asctime)s [%(levelname)s]\t%(message)s" # フォーマットを定義
-    logging.basicConfig(filename='logfile/'+OWN_FILE_NAME+'.logger.log', level=logging.INFO, format=formatter)
+# if __name__ == '__main__':
+#     formatter = "%(asctime)s [%(levelname)s]\t%(message)s" # フォーマットを定義
+#     logging.basicConfig(filename='logfile/'+OWN_FILE_NAME+'.logger.log', level=logging.INFO, format=formatter)
 
-    logger.info("start get horse html!")
-    get_horse_html_split(4)
+#     logger.info("start get horse html!")
+#     get_horse_html_split(4)

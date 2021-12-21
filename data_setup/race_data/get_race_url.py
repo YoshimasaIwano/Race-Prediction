@@ -13,11 +13,11 @@ import time
 
 import os
 from os import path
-OWN_FILE_NAME = path.splitext(path.basename('\\Users\\vmlab\\win5.ext'))[0]
+# OWN_FILE_NAME = path.splitext(path.basename('\\Users\\vmlab\\win5.ext'))[0]
 RACR_URL_DIR = "race_url"
 
-import logging
-logger = logging.getLogger('get_race_url') #ファイルの名前を渡す
+# import logging
+# logger = logging.getLogger('get_race_url') #ファイルの名前を渡す
 
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select,WebDriverWait
@@ -27,18 +27,23 @@ from selenium.webdriver.chrome.options import Options
 URL = "https://db.netkeiba.com/?pid=race_search_detail"
 WAIT_SECOND = 5
 
+def makedirs(path):
+    if not os.path.isdir(path):
+        os.makedirs(path)
 
 def get_race_url():
     options = Options()
     options.add_argument('--headless')
-    driver = webdriver.Chrome(options=options, executable_path = 'C:\\Users\\vmlab\\chromedriver_win32\\chromedriver.exe') # mac はbrewでインストールしたのでpathはok
+    driver = webdriver.Chrome(options=options, executable_path = "/usr/local/bin/chromedriver") # mac はbrewでインストールしたのでpathはok
     driver.implicitly_wait(10)
     # 去年までのデータ
     for year in range(2011, now_datetime.year):
         for month in range(1, 13):
-            race_url_file = RACR_URL_DIR + "/" + str(year) + "-" + str(month) + ".txt" #保存先ファイル
+            race_url_dir = "../data/" + RACR_URL_DIR
+            race_url_file = race_url_dir + "/" + str(year) + "-" + str(month) #+ ".txt" #保存先ファイル
+            makedirs(race_url_dir)
             if not os.path.isfile(race_url_file): # まだ取得していなければ取得
-                logger.info("getting urls ("+str(year) +" "+ str(month) + ")")
+                # logger.info("getting urls ("+str(year) +" "+ str(month) + ")")
                 try:
                     get_race_url_by_year_and_mon(driver,year,month)
                 except ConnectionError:
@@ -46,22 +51,22 @@ def get_race_url():
     # 先月までのデータ
     for year in range(now_datetime.year, now_datetime.year+1):
         for month in range(1, now_datetime.month):
-            race_url_file = RACR_URL_DIR + "/" + str(year) + "-" + str(month) + ".txt" #保存先ファイル
+            race_url_file ="../data/" + RACR_URL_DIR + "/" + str(year) + "-" + str(month) + ".txt" #保存先ファイル
             if not os.path.isfile(race_url_file): # まだ取得していなければ取得
-                logger.info("getting urls ("+str(year) +" "+ str(month) + ")")
+                # logger.info("getting urls ("+str(year) +" "+ str(month) + ")")
                 try:
                     get_race_url_by_year_and_mon(driver,year,month)
                 except ConnectionError:
                     pass
     # 今月分は毎回取得
-    logger.info("getting urls ("+str(now_datetime.year) +" "+ str(now_datetime.month) + ")")
+    # logger.info("getting urls ("+str(now_datetime.year) +" "+ str(now_datetime.month) + ")")
     get_race_url_by_year_and_mon(driver, now_datetime.year, now_datetime.month)
 
     driver.close()
     driver.quit()
 
 def get_race_url_by_year_and_mon(driver, year, month):
-    race_url_file = RACR_URL_DIR + "/" + str(year) + "-" + str(month) + ".txt" #保存先ファイル
+    race_url_file = "../data/" + RACR_URL_DIR + "/" + str(year) + "-" + str(month) + ".txt" #保存先ファイル
 
     # URLにアクセス
     wait = WebDriverWait(driver,10)
@@ -135,14 +140,14 @@ def get_race_url_by_year_and_mon(driver, year, month):
                     driver.execute_script("arguments[0].click();", target) #javascriptでクリック処理
                 except IndexError:
                     break
-        logging.info("got "+ str(total) +" urls of " + str(total_num) +" ("+str(year) +" "+ str(month) + ")")
-    else:
-        logging.info("already have " + str(pre_url_num) +" urls ("+str(year) +" "+ str(month) + ")")
+        # logging.info("got "+ str(total) +" urls of " + str(total_num) +" ("+str(year) +" "+ str(month) + ")")
+#     else:
+        # logging.info("already have " + str(pre_url_num) +" urls ("+str(year) +" "+ str(month) + ")")
 
 
-if __name__ == '__main__':
-    formatter = "%(asctime)s [%(levelname)s]\t%(message)s" # フォーマットを定義
-    logging.basicConfig(filename='logfile/'+OWN_FILE_NAME+'.logger.log', level=logging.INFO, format=formatter)
+# if __name__ == '__main__':
+#     # formatter = "%(asctime)s [%(levelname)s]\t%(message)s" # フォーマットを定義
+#     # logging.basicConfig(filename='logfile/'+OWN_FILE_NAME+'.logger.log', level=logging.INFO, format=formatter)
 
-    logger.info("start get race url!")
-    get_race_url()
+#     # logger.info("start get race url!")
+#     get_race_url()

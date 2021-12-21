@@ -13,11 +13,11 @@ import time
 
 import os
 from os import path
-OWN_FILE_NAME = path.splitext(path.basename('\\Users\\vmlab\\win5.ext'))[0]
+# OWN_FILE_NAME = path.splitext(path.basename('\\Users\\vmlab\\win5.ext'))[0]
 HORSE_URL_DIR = "horse_url"
 
-import logging
-logger = logging.getLogger('get_horse_url') #ファイルの名前を渡す
+# import logging
+# logger = logging.getLogger('get_horse_url') #ファイルの名前を渡す
 
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select,WebDriverWait
@@ -27,15 +27,20 @@ from selenium.webdriver.chrome.options import Options
 URL = "https://db.netkeiba.com/?pid=horse_search_detail"
 WAIT_SECOND = 5
 
+def makedirs(path):
+    if not os.path.isdir(path):
+        os.makedirs(path)
 
 def get_horse_url():
     options = Options()
     options.add_argument('--headless')
-    driver = webdriver.Chrome(options=options, executable_path = 'C:\\Users\\vmlab\\chromedriver_win32\\chromedriver.exe') # mac はbrewでインストールしたのでpathはok
+    driver = webdriver.Chrome(options=options, executable_path = '/usr/local/bin/chromedriver') # mac はbrewでインストールしたのでpathはok
     driver.implicitly_wait(10)
     
     #all horse data
-    horse_url_file = HORSE_URL_DIR + "/" + "horse" + ".txt" #保存先ファイル
+    horse_url_dir = "../data/" + HORSE_URL_DIR
+    makedirs(horse_url_dir)
+    horse_url_file = "/" + "horse" + ".txt" #保存先ファイル
     
     #url 取得の関数へ渡す
     try:
@@ -48,7 +53,7 @@ def get_horse_url():
     driver.quit()
 
 def get_horse_url_all(driver):
-    horse_url_file = HORSE_URL_DIR + "/" + "horse" + ".txt" #保存先ファイル
+    horse_url_file =  "../data/" + HORSE_URL_DIR + "/" + "horse" + ".txt" #保存先ファイル
 
     # URLにアクセス
     wait = WebDriverWait(driver,10)
@@ -120,14 +125,14 @@ def get_horse_url_all(driver):
                     driver.execute_script("arguments[0].click();", target) #javascriptでクリック処理
                 except IndexError:
                     break
-        logging.info("got "+ str(total) +" urls of " + str(total_num) +" ("+ "horse" + ")")
-    else:
-        logging.info("already have " + str(pre_url_num) +" urls ("+ "horse" + ")")
+    #     logging.info("got "+ str(total) +" urls of " + str(total_num) +" ("+ "horse" + ")")
+    # else:
+    #     logging.info("already have " + str(pre_url_num) +" urls ("+ "horse" + ")")
 
 
-if __name__ == '__main__':
-    formatter = "%(asctime)s [%(levelname)s]\t%(message)s" # フォーマットを定義
-    logging.basicConfig(filename='logfile/'+OWN_FILE_NAME+'.logger.log', level=logging.INFO, format=formatter)
+# if __name__ == '__main__':
+#     formatter = "%(asctime)s [%(levelname)s]\t%(message)s" # フォーマットを定義
+#     logging.basicConfig(filename='logfile/'+OWN_FILE_NAME+'.logger.log', level=logging.INFO, format=formatter)
 
-    logger.info("start get horse url!")
-    get_horse_url()
+#     logger.info("start get horse url!")
+#     get_horse_url()

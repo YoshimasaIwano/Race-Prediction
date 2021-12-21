@@ -15,13 +15,13 @@ import time
 import re
 import os
 from os import path
-OWN_FILE_NAME = path.splitext(path.basename('\\Users\\vmlab\\win5.ext'))[0]
+# OWN_FILE_NAME = path.splitext(path.basename('\\Users\\vmlab\\win5.ext'))[0]
 HORSE_URL_DIR = "horse_url"
 HORSE_HTML_DIR = "horse_html"
 CSV_DIR = "csv"
 
-import logging
-logger = logging.getLogger('make_horse_csv_from_html') #ファイルの名前を渡す
+# import logging
+# logger = logging.getLogger('make_horse_csv_from_html') #ファイルの名前を渡す
 
 def my_makedirs(path):
     if not os.path.isdir(path):
@@ -77,24 +77,24 @@ horse_data_columns=[
 
 
 def make_horse_csv_from_html():
-    save_dir = CSV_DIR+"/horse_data" 
+    save_dir = "../data/" + CSV_DIR + "/horse_data" 
     my_makedirs(save_dir)
     for i in range(62):
         make_horse_csv_split(i)
 
 def make_horse_csv_split(i):
-    save_horse_csv_dir = CSV_DIR+"/horse_data"+"/horse_"+str(i)
+    save_horse_csv_dir = "../data/" + CSV_DIR + "/horse_data" + "/horse_" + str(i)
     my_makedirs(save_horse_csv_dir)
     
     
-    logger.info("saving csv (" + "horse_" + str(i) +")")
-    total = 0;
+    # logger.info("saving csv (" + "horse_" + str(i) +")")
+    total = 0
     # indicate horse_html/horse_(i) dirs
     html_dir = HORSE_HTML_DIR+ "/" + "horse_" + str(i) 
     if os.path.isdir(html_dir):                #confirm existance of html dir
         file_list = os.listdir(html_dir) # get all html file names in horse(i) dir
         total += len(file_list)
-        logger.info(" appending " + str(len(file_list)) + " datas to csv (" + "horse_"+ str(i)+ ")")
+        # logger.info(" appending " + str(len(file_list)) + " datas to csv (" + "horse_"+ str(i)+ ")")
         for file_name in file_list:      #list all html file in horse(i) dir
             list = file_name.split(".")
             horse_id = list[-2]
@@ -215,18 +215,18 @@ def get_horse_data_from_html(horse_id, html):
 #def update_csv():
 
 
-if __name__ == '__main__':
-    formatter = "%(asctime)s [%(levelname)s]\t%(message)s" # フォーマットを定義
-    #formatter_func = "%(asctime)s\t[%(levelname)8s]\t%(message)s from %(func)" # フォーマットを定義
-    logging.basicConfig(filename='logfile/'+OWN_FILE_NAME+'.logger.log', level=logging.INFO, format=formatter)
+# if __name__ == '__main__':
+#     formatter = "%(asctime)s [%(levelname)s]\t%(message)s" # フォーマットを定義
+#     #formatter_func = "%(asctime)s\t[%(levelname)8s]\t%(message)s from %(func)" # フォーマットを定義
+#     logging.basicConfig(filename='logfile/'+OWN_FILE_NAME+'.logger.log', level=logging.INFO, format=formatter)
 
-    logger.info("start making csv!")
-    #make_horse_csv_from_html()
+#     logger.info("start making csv!")
+#     #make_horse_csv_from_html()
 
-    # テスト
-    make_horse_csv_split(4)
-    """
-    with open("race_html/2008/1/200810010312.html", "r") as f:
-        html = f.read()
-        get_rade_and_horse_data_by_html(200810010312,html)
-"""
+#     # テスト
+#     make_horse_csv_split(4)
+#     """
+#     with open("race_html/2008/1/200810010312.html", "r") as f:
+#         html = f.read()
+#         get_rade_and_horse_data_by_html(200810010312,html)
+# """

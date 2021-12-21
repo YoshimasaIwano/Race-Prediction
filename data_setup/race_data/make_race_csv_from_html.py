@@ -14,13 +14,13 @@ import time
 import re
 import os
 from os import path
-OWN_FILE_NAME = path.splitext(path.basename('\\Users\\vmlab\\win5.ext'))[0]
+# OWN_FILE_NAME = path.splitext(path.basename('\\Users\\vmlab\\win5.ext'))[0]
 RACR_URL_DIR = "race_url"
 RACR_HTML_DIR = "race_html"
 CSV_DIR = "csv"
 
-import logging
-logger = logging.getLogger('make_race_csv_from_html') #ファイルの名前を渡す
+# import logging
+# logger = logging.getLogger('make_race_csv_from_html') #ファイルの名前を渡す
 
 def my_makedirs(path):
     if not os.path.isdir(path):
@@ -76,27 +76,27 @@ race_data_columns=[
 """
 
 def make_race_csv_from_html():
-    save_dir = CSV_DIR+"/race_data" 
+    save_dir = "../data/" + CSV_DIR + "/race_data" 
     my_makedirs(save_dir)
     for year in range(2011, now_datetime.year+1):
         make_csv_from_html_year(year)
 
 def make_csv_from_html_year(year):
-    save_race_csv = CSV_DIR+"/race_data"+"/race-"+str(year)+".csv"
+    save_race_csv = "../data/" + CSV_DIR + "/race_data" + "/race-" + str(year) + ".csv"
     #horse_race_csv = CSV_DIR+"/horse-"+str(year)+".csv"
     #my_makedirs(save_race_csv)
     #my_makedirs(horse_race_csv)
     if not ((os.path.isfile(save_race_csv)) ): # まだcsvがなければ生成
         race_df = pd.DataFrame(columns=race_data_columns )
-        logger.info("saving csv (" + str(year) +")")
-        total = 0;
+        # logger.info("saving csv (" + str(year) +")")
+        total = 0
         for month in range(1, 13):
             # race_html/year/month というディレクトリが存在すればappend, なければ何もしない
-            html_dir = RACR_HTML_DIR+"/"+str(year)+"/"+str(month)
+            html_dir = "../data/" + RACR_HTML_DIR + "/" + str(year) + "/" + str(month)
             if os.path.isdir(html_dir):
                 file_list = os.listdir(html_dir) # get all file names
                 total += len(file_list)
-                logger.info(" appending " + str(len(file_list)) + " datas to csv (" + str(year)  +" "+ str(month)+ ")")
+                # logger.info(" appending " + str(len(file_list)) + " datas to csv (" + str(year)  +" "+ str(month)+ ")")
                 for file_name in file_list:
                     with open(html_dir+"/"+file_name, "r") as f:
                         html = f.read()
@@ -114,11 +114,11 @@ def make_csv_from_html_year(year):
         
         race_df.to_csv(save_race_csv, header=True, index=False)     #all data in year to csv
        
-        logger.info(' (rows, columns) of race_df:\t'+ str(race_df.shape))
+    #     logger.info(' (rows, columns) of race_df:\t'+ str(race_df.shape))
         
-        logger.info("saved " + str(total) + " htmls to csv (" + str(year) +")")
-    else:
-        logger.info("already have csv (" + str(year) +")")
+    #     logger.info("saved " + str(total) + " htmls to csv (" + str(year) +")")
+    # else:
+    #     logger.info("already have csv (" + str(year) +")")
 
 def get_race_data_from_html(race_id, html):
     race_list = [race_id]
@@ -256,18 +256,18 @@ def get_race_data_from_html(race_id, html):
 #def update_csv():
 
 
-if __name__ == '__main__':
-    formatter = "%(asctime)s [%(levelname)s]\t%(message)s" # フォーマットを定義
-    #formatter_func = "%(asctime)s\t[%(levelname)8s]\t%(message)s from %(func)" # フォーマットを定義
-    logging.basicConfig(filename='logfile/'+OWN_FILE_NAME+'.logger.log', level=logging.INFO, format=formatter)
+# if __name__ == '__main__':
+#     formatter = "%(asctime)s [%(levelname)s]\t%(message)s" # フォーマットを定義
+#     #formatter_func = "%(asctime)s\t[%(levelname)8s]\t%(message)s from %(func)" # フォーマットを定義
+#     logging.basicConfig(filename='logfile/'+OWN_FILE_NAME+'.logger.log', level=logging.INFO, format=formatter)
 
-    logger.info("start making csv!")
-    make_race_csv_from_html()
+#     logger.info("start making csv!")
+#     make_race_csv_from_html()
 
-    # テスト
-    #make_csv_from_html_by_year(2011)
-    """
-    with open("race_html/2008/1/200810010312.html", "r") as f:
-        html = f.read()
-        get_rade_and_horse_data_by_html(200810010312,html)
-"""
+#     # テスト
+#     #make_csv_from_html_by_year(2011)
+#     """
+#     with open("race_html/2008/1/200810010312.html", "r") as f:
+#         html = f.read()
+#         get_rade_and_horse_data_by_html(200810010312,html)
+# """
