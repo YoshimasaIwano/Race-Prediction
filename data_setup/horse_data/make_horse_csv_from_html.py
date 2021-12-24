@@ -79,7 +79,7 @@ horse_data_columns=[
 def make_horse_csv_from_html():
     save_dir = "../data/" + CSV_DIR + "/horse_data" 
     my_makedirs(save_dir)
-    for i in range(62):
+    for i in range(63):
         make_horse_csv_split(i)
 
 def make_horse_csv_split(i):
@@ -90,7 +90,7 @@ def make_horse_csv_split(i):
     # logger.info("saving csv (" + "horse_" + str(i) +")")
     total = 0
     # indicate horse_html/horse_(i) dirs
-    html_dir = HORSE_HTML_DIR+ "/" + "horse_" + str(i) 
+    html_dir = "../data/" + HORSE_HTML_DIR+ "/" + "horse_" + str(i) 
     if os.path.isdir(html_dir):                #confirm existance of html dir
         file_list = os.listdir(html_dir) # get all html file names in horse(i) dir
         total += len(file_list)

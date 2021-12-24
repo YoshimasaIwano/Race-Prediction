@@ -44,7 +44,7 @@ def my_makedirs(path):
         os.makedirs(path)
         
 def get_horse_html():
-    for i in range(62):
+    for i in range(63):
         get_horse_html_split(i)
 
 def get_horse_html_split(i):
