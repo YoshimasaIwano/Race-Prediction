@@ -19,13 +19,13 @@ import cchardet
 import time
 import os
 from os import path
-OWN_FILE_NAME = path.splitext(path.basename('\\Users\\vmlab\\win5.ext'))[0]
-RACR_URL_DIR = "race_url"
-RACR_HTML_DIR = "race_html"
+# OWN_FILE_NAME = path.splitext(path.basename('\\Users\\vmlab\\win5.ext'))[0]
+RACR_URL_DIR = "../data/race_url"
+RACR_HTML_DIR = "../data/race_html"
 
 
-import logging
-logger = logging.getLogger('this_week_race_html') #ファイルの名前を渡す
+# import logging
+# logger = logging.getLogger('this_week_race_html') #ファイルの名前を渡す
 
 proxies_dic = {
     "http": "http://proxy.example.co.jp:8080",
@@ -51,8 +51,8 @@ def my_makedirs(path):
 
 
 def this_week_race_html():
-    with open(RACR_URL_DIR+"/"+ "4_18-win5" + ".txt", "r") as f:
-        save_dir = RACR_HTML_DIR+"/4_18" 
+    with open(RACR_URL_DIR + "/2021" + "/"+ "12_25" + ".txt", "r") as f:
+        save_dir = RACR_HTML_DIR + "/2021" + "/12_25" 
         my_makedirs(save_dir)
         urls = f.read().splitlines()
 
@@ -60,7 +60,7 @@ def this_week_race_html():
 
         # 取得すべき数と既に保持している数が違う場合のみ行う
         if len(urls) != len(file_list):
-            logger.info("getting htmls ("+"this week" + ")")
+            # logger.info("getting htmls ("+"this week" + ")")
             for url in urls:
                 list = url.split("=")
                 race_id = list[-2]
@@ -92,14 +92,14 @@ def this_week_race_html():
                     time.sleep(1)
                     with open(save_file_path, 'w') as file:
                         file.write(html)
-            logging.info("saved " +" htmls ("+ "this week" + ")")
-        else:
-            logging.info("already have " + str(len(urls)) +" htmls ("+ "this week" + ")")
+            # logging.info("saved " +" htmls ("+ "this week" + ")")
+        # else:
+            # logging.info("already have " + str(len(urls)) +" htmls ("+ "this week" + ")")
 
 
-if __name__ == '__main__':
-    formatter = "%(asctime)s [%(levelname)s]\t%(message)s" # フォーマットを定義
-    logging.basicConfig(filename='logfile/'+OWN_FILE_NAME+'.logger.log', level=logging.INFO, format=formatter)
+# if __name__ == '__main__':
+#     formatter = "%(asctime)s [%(levelname)s]\t%(message)s" # フォーマットを定義
+#     logging.basicConfig(filename='logfile/'+OWN_FILE_NAME+'.logger.log', level=logging.INFO, format=formatter)
 
-    logger.info("start get race html!")
-    get_race_html()
+#     logger.info("start get race html!")
+#     get_race_html()

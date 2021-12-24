@@ -11,15 +11,15 @@ now_datetime = datetime.datetime.now(pytz.timezone('Asia/Tokyo'))
 import re
 import time
 from selenium.common.exceptions import StaleElementReferenceException
-from requests_html import HTMLSession
+# from requests_html import HTMLSession
 
 import os
 from os import path
-OWN_FILE_NAME = path.splitext(path.basename('\\Users\\vmlab\\win5.ext'))[0]
-RACR_URL_DIR = "race_url"
+# OWN_FILE_NAME = path.splitext(path.basename('\\Users\\vmlab\\win5.ext'))[0]
+RACR_URL_DIR = "../data/race_url"
 
-import logging
-logger = logging.getLogger('this_week_race_url') #ファイルの名前を渡す
+# import logging
+# logger = logging.getLogger('this_week_race_url') #ファイルの名前を渡す
 
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select,WebDriverWait
@@ -35,10 +35,10 @@ WAIT_SECOND = 5
 def this_week_race_url():
     options = Options()
     options.add_argument('--headless')
-    driver = webdriver.Chrome(options=options, executable_path = 'C:\\Users\\vmlab\\chromedriver_win32\\chromedriver.exe') # mac はbrewでインストールしたのでpathはok
+    driver = webdriver.Chrome(options=options, executable_path = '/usr/local/bin/chromedriver') # mac はbrewでインストールしたのでpathはok
     driver.implicitly_wait(5)
     # データ
-    race_url_file = RACR_URL_DIR + "/" + "4_18" + "-win5" + ".txt" #保存先ファイル
+    race_url_file = RACR_URL_DIR + "/2021" + "/" + "12_25" + ".txt" #保存先ファイル
     try:
         get_race_url_weekend(driver)
     except ConnectionError:
@@ -49,7 +49,7 @@ def this_week_race_url():
     driver.quit()
 
 def get_race_url_weekend(driver):
-    race_url_file = RACR_URL_DIR + "/" + "4_18" + "-win5" + ".txt" #保存先ファイル
+    race_url_file = RACR_URL_DIR + "/2021" + "/" + "12_25" + ".txt" #保存先ファイル
 
     # URLにアクセス
     wait = WebDriverWait(driver,2)
@@ -89,9 +89,9 @@ def get_race_url_weekend(driver):
 
 
 
-if __name__ == '__main__':
-    formatter = "%(asctime)s [%(levelname)s]\t%(message)s" # フォーマットを定義
-    logging.basicConfig(filename='logfile/'+OWN_FILE_NAME+'.logger.log', level=logging.INFO, format=formatter)
+# if __name__ == '__main__':
+#     formatter = "%(asctime)s [%(levelname)s]\t%(message)s" # フォーマットを定義
+#     logging.basicConfig(filename='logfile/'+OWN_FILE_NAME+'.logger.log', level=logging.INFO, format=formatter)
 
-    logger.info("start get race url!")
-    get_race_url()
+#     logger.info("start get race url!")
+#     get_race_url()

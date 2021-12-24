@@ -15,13 +15,13 @@ import time
 import re
 import os
 from os import path
-OWN_FILE_NAME = path.splitext(path.basename('\\Users\\vmlab\\win5.ext'))[0]
-RACR_URL_DIR = "race_url"
-RACR_HTML_DIR = "race_html"
-CSV_DIR = "csv"
+# OWN_FILE_NAME = path.splitext(path.basename('\\Users\\vmlab\\win5.ext'))[0]
+RACR_URL_DIR = "../data/race_url"
+RACR_HTML_DIR = "../data/race_html"
+CSV_DIR = "../data/csv"
 
-import logging
-logger = logging.getLogger('make_csv_from_this_week_html') #ファイルの名前を渡す
+# import logging
+# logger = logging.getLogger('make_csv_from_this_week_html') #ファイルの名前を渡す
 
 def my_makedirs(path):
     if not os.path.isdir(path):
@@ -55,13 +55,13 @@ race_data_columns=[
 
 
 def make_csv_from_this_week_html():
-    save_race_csv = CSV_DIR+"/data"+"/apr_3/4_18"+".csv"
+    save_race_csv = CSV_DIR+"/2021"+"/dec_4/12_25"+".csv"
     
     if not ((os.path.isfile(save_race_csv)) ): # まだcsvがなければ生成
         race_df = pd.DataFrame(columns=race_data_columns )
-        total = 0;
+        total = 0
         # race_html/year/month というディレクトリが存在すればappend, なければ何もしない
-        html_dir = RACR_HTML_DIR+"/"+"4_18"
+        html_dir = RACR_HTML_DIR+"/"+"12_25"
         if os.path.isdir(html_dir):
             file_list = os.listdir(html_dir) # get all file names
             total += len(file_list)
@@ -80,11 +80,11 @@ def make_csv_from_this_week_html():
         
         race_df.to_csv(save_race_csv, header=True, index=False)     #all data in year to csv
        
-        logger.info(' (rows, columns) of race_df:\t'+ str(race_df.shape))
+        # logger.info(' (rows, columns) of race_df:\t'+ str(race_df.shape))
         
-        logger.info("saved " + str(total) + " htmls to csv (" + "this week" +")")
-    else:
-        logger.info("already have csv (" + "this week" +")")
+        # logger.info("saved " + str(total) + " htmls to csv (" + "this week" +")")
+    # else:
+        # logger.info("already have csv (" + "this week" +")")
 
 def get_race_data_from_html(race_id, html):
     race_list = [race_id]
@@ -105,7 +105,7 @@ def get_race_data_from_html(race_id, html):
     race_list.append('良') # ground_condition
     race_list.append(race_details1[0]) # time
     race_details2 = data_intro_2.find("div", class_="RaceData02").get_text().split("\n")
-    race_list.append("2021-4-18") # date
+    race_list.append("2021-12-25") # date
     race_list.append(race_details2[2]) # place
 
     result_rows = soup.find("div", {"class":"RaceTableArea"}).findAll('tr') # レース結果
@@ -225,18 +225,18 @@ def get_race_data_from_html(race_id, html):
 #def update_csv():
 
 
-if __name__ == '__main__':
-    formatter = "%(asctime)s [%(levelname)s]\t%(message)s" # フォーマットを定義
-    #formatter_func = "%(asctime)s\t[%(levelname)8s]\t%(message)s from %(func)" # フォーマットを定義
-    logging.basicConfig(filename='logfile/'+OWN_FILE_NAME+'.logger.log', level=logging.INFO, format=formatter)
+# if __name__ == '__main__':
+#     formatter = "%(asctime)s [%(levelname)s]\t%(message)s" # フォーマットを定義
+#     #formatter_func = "%(asctime)s\t[%(levelname)8s]\t%(message)s from %(func)" # フォーマットを定義
+#     logging.basicConfig(filename='logfile/'+OWN_FILE_NAME+'.logger.log', level=logging.INFO, format=formatter)
 
-    logger.info("start making csv!")
-    make_race_csv_from_html()
+#     logger.info("start making csv!")
+#     make_race_csv_from_html()
 
-    # テスト
-    #make_csv_from_html_by_year(2011)
-    """
-    with open("race_html/2008/1/200810010312.html", "r") as f:
-        html = f.read()
-        get_rade_and_horse_data_by_html(200810010312,html)
-"""
+#     # テスト
+#     #make_csv_from_html_by_year(2011)
+#     """
+#     with open("race_html/2008/1/200810010312.html", "r") as f:
+#         html = f.read()
+#         get_rade_and_horse_data_by_html(200810010312,html)
+# """
