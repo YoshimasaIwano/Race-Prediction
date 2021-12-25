@@ -48,7 +48,7 @@ race_data_columns=[
     'half_order',
     'last_time',
     'odds',
-    'pop',
+#     'pop',
     'horse_weight',
     ]
 
@@ -234,7 +234,7 @@ def get_race_data_from_html(race_id, html):
         # odds
         horse_list.append(result_row[12].get_text())
         # popular
-        horse_list.append(result_row[13].get_text())
+#         horse_list.append(result_row[13].get_text())
         # horse_weight
         horse_list.append(result_row[14].get_text())
         # tame_time(premium)

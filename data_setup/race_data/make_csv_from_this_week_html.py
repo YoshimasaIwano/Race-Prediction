@@ -55,13 +55,13 @@ race_data_columns=[
 
 
 def make_csv_from_this_week_html():
-    save_race_csv = CSV_DIR+"/2021"+"/dec_4/12_25"+".csv"
+    save_race_csv = CSV_DIR+"/2021"+"/dec_4/12_26"+".csv"
     
     if not ((os.path.isfile(save_race_csv)) ): # まだcsvがなければ生成
         race_df = pd.DataFrame(columns=race_data_columns )
         total = 0
         # race_html/year/month というディレクトリが存在すればappend, なければ何もしない
-        html_dir = RACR_HTML_DIR+"/"+"12_25"
+        html_dir = RACR_HTML_DIR+"/2021"+"/"+"12_26"
         if os.path.isdir(html_dir):
             file_list = os.listdir(html_dir) # get all file names
             total += len(file_list)
@@ -105,7 +105,7 @@ def get_race_data_from_html(race_id, html):
     race_list.append('良') # ground_condition
     race_list.append(race_details1[0]) # time
     race_details2 = data_intro_2.find("div", class_="RaceData02").get_text().split("\n")
-    race_list.append("2021-12-25") # date
+    race_list.append("2021-12-26") # date
     race_list.append(race_details2[2]) # place
 
     result_rows = soup.find("div", {"class":"RaceTableArea"}).findAll('tr') # レース結果
