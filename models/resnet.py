@@ -91,7 +91,7 @@ class ResNet(tf.keras.Model):
         return x
 
 # 学習
-def resrace(input_dim, output_dim):
+def ResRace(input_dim, output_dim):
     model = ResNet(input_dim, output_dim)
     model.build(input_shape=(None, input_dim))
     opt = tf.keras.optimizers.SGD(momentum = 0.9)
