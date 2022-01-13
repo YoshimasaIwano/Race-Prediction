@@ -1,4 +1,5 @@
 import tensorflow as tf
+import numpy as np
 
 def get_angles(pos, i, d_model):
     angle_rates = 1 / np.power(10000, (2 * (i//2)) / np.float32(d_model))
@@ -20,7 +21,7 @@ def positional_encoding(position, d_model):
     return tf.cast(pos_encoding, dtype=tf.float32)
 
 def create_padding_mask(seq):
-    seq = tf.cast(tf.math.equal(seq, 0), tf.float32)
+    seq = tf.cast(tf.math.equal(seq, -float('inf')), tf.float32)
 
     # add extra dimensions to add the padding
     # to the attention logits.
@@ -52,7 +53,7 @@ def scaled_dot_product_attention(q, k, v, mask):
 
     # add the mask to the scaled tensor.
     if mask is not None:
-    scaled_attention_logits += (mask * -1e9)
+        scaled_attention_logits += (mask * -1e9)
 
     # softmax is normalized on the last axis (seq_len_k) so that the scores
     # add up to 1.
@@ -138,7 +139,7 @@ class EncoderLayer(tf.keras.layers.Layer):
         ffn_output = self.dropout2(ffn_output, training=training)
         out2 = self.layernorm2(out1 + ffn_output)  # (batch_size, input_seq_len, d_model)
 
-    return out2
+        return out2
 
 class Encoder(tf.keras.layers.Layer):
     def __init__(self, num_layers, d_model, num_heads, d_ffn, maximum_position_encoding, rate=0.1):
@@ -163,7 +164,7 @@ class Encoder(tf.keras.layers.Layer):
         x = self.dropout(x, training=training)
 
         for i in range(self.num_layers):
-        x = self.enc_layers[i](x, training, mask)
+            x = self.enc_layers[i](x, training, mask)
 
         return x  # (batch_size, input_seq_len, d_model)
 
