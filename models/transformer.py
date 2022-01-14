@@ -21,15 +21,16 @@ def positional_encoding(position, d_model):
     return tf.cast(pos_encoding, dtype=tf.float32)
 
 def create_padding_mask(seq):
+    seq_len = seq.shape[1]
     seq = tf.cast(tf.math.equal(seq, -float('inf')), tf.float32)
 
     # add extra dimensions to add the padding
     # to the attention logits.
     return seq[:, tf.newaxis, tf.newaxis, :]  # (batch_size, 1, 1, seq_len)
 
-def create_look_ahead_mask(size):
-    mask = 1 - tf.linalg.band_part(tf.ones((size, size)), -1, 0)
-    return mask  # (seq_len, seq_len)
+# def create_look_ahead_mask(size):
+#     mask = 1 - tf.linalg.band_part(tf.ones((size, size)), -1, 0)
+#     return mask  # (seq_len, seq_len)
 
 def scaled_dot_product_attention(q, k, v, mask):
     """Calculate the attention weights.
@@ -56,6 +57,8 @@ def scaled_dot_product_attention(q, k, v, mask):
     dk = tf.cast(tf.shape(k)[-1], tf.float32)
     scaled_attention_logits = matmul_qk / tf.math.sqrt(dk)
 
+    print(scaled_attention_logits.shape, "scaled_attention_shape")
+    print(mask.shape, "mask shape")
     # add the mask to the scaled tensor.
     if mask is not None:
         scaled_attention_logits += (mask * -1e9)
@@ -69,10 +72,11 @@ def scaled_dot_product_attention(q, k, v, mask):
     return output
 
 class MultiHeadAttention(tf.keras.layers.Layer):
-    def __init__(self, d_model, num_heads):
+    def __init__(self, d_model, num_heads, seq_len):
         super(MultiHeadAttention, self).__init__()
         self.num_heads = num_heads
         self.d_model = d_model
+        self.seq_len = seq_len
 
         assert d_model % self.num_heads == 0
 
@@ -88,7 +92,7 @@ class MultiHeadAttention(tf.keras.layers.Layer):
         """Split the last dimension into (num_heads, depth).
         Transpose the result such that the shape is (batch_size, num_heads, seq_len, depth)
         """
-        x = tf.reshape(x, (batch_size, -1, self.num_heads, self.depth))
+        x = tf.reshape(x, (batch_size, self.seq_len, self.num_heads, self.depth))
         print(x.shape,"split_head")
         return tf.transpose(x, perm=[0, 2, 1, 3])
 
@@ -124,10 +128,10 @@ def point_wise_feed_forward_network(d_model, d_ffn):
     ])
 
 class EncoderLayer(tf.keras.layers.Layer):
-    def __init__(self, d_model, num_heads, d_ffn, rate=0.1):
+    def __init__(self, d_model, num_heads, d_ffn, seq_len, rate=0.1):
         super(EncoderLayer, self).__init__()
 
-        self.mha = MultiHeadAttention(d_model, num_heads)
+        self.mha = MultiHeadAttention(d_model, num_heads, seq_len)
         self.ffn = point_wise_feed_forward_network(d_model, d_ffn)
 
         self.layernorm1 = tf.keras.layers.LayerNormalization(epsilon=1e-6)
@@ -156,7 +160,7 @@ class Encoder(tf.keras.layers.Layer):
         self.num_layers = num_layers
         self.pos_encoding = positional_encoding(maximum_position_encoding, self.d_model)
 
-        self.enc_layers = [EncoderLayer(d_model, num_heads, d_ffn, rate)
+        self.enc_layers = [EncoderLayer(d_model, num_heads, d_ffn, maximum_position_encoding, rate)
                             for _ in range(num_layers)]
         self.dropout = tf.keras.layers.Dropout(rate)
 
@@ -187,7 +191,8 @@ class TransRace(tf.keras.Model):
     def call(self, inputs, training):
         inp, tar = inputs
 
-        enc_padding_mask, look_ahead_mask, dec_padding_mask = self.create_masks(inp, tar)
+        enc_padding_mask = self.create_masks(inp) #, tar
+        # , look_ahead_mask, dec_padding_mask
 
         enc_output = self.encoder(inp, training, enc_padding_mask)
 
@@ -195,19 +200,20 @@ class TransRace(tf.keras.Model):
 
         return final_output
     
-    def create_masks(self, inp, tar):
+    def create_masks(self, inp):#, tar
         # Encoder padding mask
         enc_padding_mask = create_padding_mask(inp)
+        print("mask shape afer creating", enc_padding_mask.shape)
 
         # Used in the 2nd attention block in the decoder.
         # This padding mask is used to mask the encoder outputs.
-        dec_padding_mask = create_padding_mask(inp)
+        # dec_padding_mask = create_padding_mask(inp)
 
         # Used in the 1st attention block in the decoder.
         # It is used to pad and mask future tokens in the input received by
         # the decoder.
-        look_ahead_mask = create_look_ahead_mask(tf.shape(tar)[1])
-        dec_target_padding_mask = create_padding_mask(tar)
-        look_ahead_mask = tf.maximum(dec_target_padding_mask, look_ahead_mask)
+        # look_ahead_mask = create_look_ahead_mask(tf.shape(tar)[1])
+        # dec_target_padding_mask = create_padding_mask(tar)
+        # look_ahead_mask = tf.maximum(dec_target_padding_mask, look_ahead_mask)
 
-        return enc_padding_mask, look_ahead_mask, dec_padding_mask
+        return enc_padding_mask #, look_ahead_mask , dec_padding_mask
