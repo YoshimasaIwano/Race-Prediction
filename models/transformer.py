@@ -21,7 +21,7 @@ def positional_encoding(position, d_model):
     return tf.cast(pos_encoding, dtype=tf.float32)
 
 def create_padding_mask(seq):
-    seq_len = seq.shape[1]
+    # seq_len = seq.shape[1]
     seq = tf.cast(tf.math.equal(seq, -float('inf')), tf.float32)
 
     # add extra dimensions to add the padding
@@ -58,7 +58,8 @@ def scaled_dot_product_attention(q, k, v, mask):
     scaled_attention_logits = matmul_qk / tf.math.sqrt(dk)
 
     print(scaled_attention_logits.shape, "scaled_attention_shape")
-    print(mask.shape, "mask shape")
+    # print(mask.shape, "mask shape")
+
     # add the mask to the scaled tensor.
     if mask is not None:
         scaled_attention_logits += (mask * -1e9)
@@ -142,7 +143,7 @@ class EncoderLayer(tf.keras.layers.Layer):
 
     def call(self, x, training, mask):
         print(x.shape,"mha")
-        attn_output = self.mha(x, x, x, mask)  # (batch_size, input_seq_len, d_model)
+        attn_output = self.mha(x, x, x, mask=None)  # (batch_size, input_seq_len, d_model)
         attn_output = self.dropout1(attn_output, training=training)
         out1 = self.layernorm1(x + attn_output)  # (batch_size, input_seq_len, d_model)
 
@@ -186,7 +187,7 @@ class TransRace(tf.keras.Model):
         self.encoder = Encoder(num_layers, d_model, num_heads, d_ffn,
                                  pe_input, rate)
 
-        self.final_layer = tf.keras.layers.Dense(target_size)
+        self.final_layer = tf.keras.layers.Dense(target_size, activation="softmax")
 
     def call(self, inputs, training):
         inp, tar = inputs
@@ -203,7 +204,7 @@ class TransRace(tf.keras.Model):
     def create_masks(self, inp):#, tar
         # Encoder padding mask
         enc_padding_mask = create_padding_mask(inp)
-        print("mask shape afer creating", enc_padding_mask.shape)
+        print("mask shape after creating", enc_padding_mask.shape)
 
         # Used in the 2nd attention block in the decoder.
         # This padding mask is used to mask the encoder outputs.
