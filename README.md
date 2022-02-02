@@ -22,9 +22,9 @@ The following libraries are used; </br>
 The first step is to get race data with results from this Web site (https://www.netkeiba.com/). </br>
 Finally, the temporory pure race data csv file are made through the following procedure; </br>
 
-        -get all url of race and horse data </br>
-        -save all race and horse data html </br>
-        -scrape necessary data from these html files </br>
+        -get all url of race and horse data 
+        -save all race and horse data html 
+        -scrape necessary data from these html files 
 
 
 2. Making data </br>
@@ -34,10 +34,10 @@ For example, the pedigree and previous race results of the horse are considered.
 3. Creating models </br>
 I created two types of model. </br>
 
-        ResRace: it is based on Resnet, which has skipping connections, but ResRace completely consists of </br>
-                 fully-connected layers (multilayer perceptrons) , not CNN.  </br>
-        TransRace: it is based on Transformer, which has self-attention architecture, so the data should be </br>
-                   a sequential shape. This point is challenging for me. </br>
+        ResRace: it is based on Resnet, which has skipping connections, but ResRace completely consists of 
+                 fully-connected layers (multilayer perceptrons) , not CNN.  
+        TransRace: it is based on Transformer, which has self-attention architecture, so the data should be 
+                   a sequential shape. This point is challenging for me. 
 
 
 4. Predict </br>
@@ -48,23 +48,23 @@ using above pre-trianed models.  </br>
 1. data_setup </br>
 To set up the final train data </br>
 
-        main.ipynb: to get url, to open html, and to create csv files </br>
-        purify_(horse/race)_ data.ipynb: To extract and adjust data </br>
-        make_train_data.ipynb: To make the final train data </br>
+        main.ipynb: to get url, to open html, and to create csv files 
+        purify_(horse/race)_ data.ipynb: To extract and adjust data 
+        make_train_data.ipynb: To make the final train data 
 
 
 2. models </br>
 Each file is a distinct model </br>
 
-        resnet.py: it is ResRace. </br>
-        transformer.py: it is TransRace. </br>
+        resnet.py: it is ResRace. 
+        transformer.py: it is TransRace. 
 
 
 3. training </br>
 To run and train models </br>
 
-        resnet_train.ipynb: it is for training ResRace model. </br>
-        transformer_train.ipynb: it is for training TransRace model. </br>
+        resnet_train.ipynb: it is for training ResRace model. 
+        transformer_train.ipynb: it is for training TransRace model. 
 
 
 4. prediction </br>
