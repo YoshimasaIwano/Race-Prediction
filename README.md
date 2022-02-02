@@ -34,10 +34,10 @@ For example, the pedigree and previous race results of the horse are considered.
 3. *Creating models* </br>
 I created two types of model. </br>
 
-+ **ResRace**:   it is based on Resnet, which has skipping connections, but ResRace completely consists of 
-                 fully-connected layers (multilayer perceptrons) , not CNN.  
-+ **TransRace**: it is based on Transformer, which has self-attention architecture, so the data should be 
-                 a sequential shape. This point is challenging for me. 
++ **ResRace**: &emsp;&ensp;it is based on Resnet, which has skipping connections, but ResRace completely consists of </br>
+  &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;fully-connected layers (multilayer perceptrons) , not CNN.  
++ **TransRace**:&emsp;it is based on Transformer, which has self-attention architecture, so the data should be </br>
+  &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;a sequential shape. This point is challenging for me. 
 </br>
 
 4. *Predict* </br>
@@ -48,23 +48,23 @@ using above pre-trianed models.  </br>
 1. *data_setup* </br>
 To set up the final train data </br>
 
-+ **main.ipynb**:                      To get url, to open html, and to create csv files 
-+ **purify_(horse/race)_ data.ipynb**: To extract and adjust data 
-+ **make_train_data.ipynb**:           To make the final train data 
++ **main.ipynb**:&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;To get url, to open html, and to create csv files 
++ **purify_(horse/race)_ data.ipynb**:&emsp;To extract and adjust data 
++ **make_train_data.ipynb**:&emsp;&emsp;&emsp;&emsp;&emsp;To make the final train data 
 
 
 2. *models* </br>
 Each file is a distinct model </br>
 
-+ **resnet.py**:      it is ResRace. 
-+ **transformer.py**: it is TransRace. 
++ **resnet.py**:&emsp;&emsp;&emsp;&ensp;it is ResRace. 
++ **transformer.py**:&emsp;it is TransRace. 
 
 
 3. *training* </br>
 To run and train models </br>
 
-+ **resnet_train.ipynb**:      it is for training ResRace model. 
-+ **transformer_train.ipynb**: it is for training TransRace model. 
++ **resnet_train.ipynb**:&emsp;&emsp;&emsp;&ensp;it is for training ResRace model. 
++ **transformer_train.ipynb**:&emsp;it is for training TransRace model. 
 
 
 4. *prediction* </br>
