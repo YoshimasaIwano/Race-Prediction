@@ -6,6 +6,7 @@ Also, this reoisitory is totally for private use.  </br>
 
 These files are mostly written in Python and run on Jupyter Notebook. </br>
 The following libraries are used; </br> 
+
     Requests </br>
     BeautifulSoup </br>
     Selenium </br>
@@ -20,6 +21,7 @@ The following libraries are used; </br>
 1. Scraping </br>
 The first step is to get race data with results from this Web site (https://www.netkeiba.com/). </br>
 Finally, the temporory pure race data csv file are made through the following procedure; </br>
+
     -get all url of race and horse data </br>
     -save all race and horse data html </br>
     -scrape necessary data from these html files </br>
@@ -30,6 +32,7 @@ For example, the pedigree and previous race results of the horse are considered.
 
 3. Creating models </br>
 I created two types of model. </br>
+
     ResRace: it is based on Resnet, which has skipping connections, but ResRace completely consists of </br>
              fully-connected layers (multilayer perceptrons) , not CNN.  </br>
     TransRace: it is based on Transformer, which has self-attention architecture, so the data should be </br>
@@ -42,16 +45,22 @@ using above pre-trianed models.  </br>
 # 3. Implementation
 1. data_setup </br>
 To set up the final train data </br>
+
     main.ipynb: to get url, to open html, and to create csv files </br>
     purify_(horse/race)_ data.ipynb: To extract and adjust data </br>
     make_train_data.ipynb: To make the final train data </br>
+
 2. models </br>
 Each file is a distinct model </br>
+
     resnet.py: it is ResRace. </br>
     transformer.py: it is TransRace. </br>
+
 3. training </br>
-To run and train models
+To run and train models </br>
+
     resnet_train.ipynb: it is for training ResRace model. </br>
     transformer_train.ipynb: it is for training TransRace model. </br>
+
 4. prediction </br>
 To predict the upcoming weekend race. </br>
