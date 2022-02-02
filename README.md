@@ -34,7 +34,7 @@ For example, the pedigree and previous race results of the horse are considered.
 3. Creating models </br>
 I created two types of model. </br>
 
-        **ResRace**: it is based on Resnet, which has skipping connections, but ResRace completely consists of 
+        <strong>ResRace</strong>: it is based on Resnet, which has skipping connections, but ResRace completely consists of 
                  fully-connected layers (multilayer perceptrons) , not CNN.  
         **TransRace**: it is based on Transformer, which has self-attention architecture, so the data should be 
                    a sequential shape. This point is challenging for me. 
