@@ -182,15 +182,16 @@ class Encoder(tf.keras.layers.Layer):
 
 class TransRace(tf.keras.Model):
     def __init__(self, num_layers, d_model, num_heads, d_ffn, 
-                    pe_input, target_size, rate=0.1):
+                    pe_input, target_size, dynamic, rate=0.1):
         super().__init__()
         self.encoder = Encoder(num_layers, d_model, num_heads, d_ffn,
                                  pe_input, rate)
 
         self.final_layer = tf.keras.layers.Dense(target_size, activation="softmax")
 
+    @tf.function
     def call(self, inputs, training):
-        inp, tar = inputs
+        inp = inputs
 
         enc_padding_mask = self.create_masks(inp) #, tar
         # , look_ahead_mask, dec_padding_mask
