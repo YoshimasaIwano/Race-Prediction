@@ -22,11 +22,13 @@ def positional_encoding(position, d_model):
 
 def create_padding_mask(seq):
     # seq_len = seq.shape[1]
-    seq = tf.cast(tf.math.equal(seq, -float('inf')), tf.float32)
-
+    seq = tf.math.equal(seq, -float('inf'))
+    seq = tf.cast(tf.math.reduce_any(seq, axis=-1), tf.float32)
+    print('mask shape after creating', seq.shape)
     # add extra dimensions to add the padding
     # to the attention logits.
-    return seq[:, tf.newaxis, tf.newaxis, :]  # (batch_size, 1, 1, seq_len)
+    # (?, 1, 18, 18)
+    return seq #[:, tf.newaxis, tf.newaxis, :]  # (batch_size, 1, 1, seq_len)
 
 # def create_look_ahead_mask(size):
 #     mask = 1 - tf.linalg.band_part(tf.ones((size, size)), -1, 0)
@@ -50,7 +52,7 @@ def scaled_dot_product_attention(q, k, v, mask):
     output
     """
 
-    print(q.shape,"scaled_dot_")
+    print(q.shape,"q_shape")
     matmul_qk = tf.matmul(q, k, transpose_b=True)  # (..., seq_len_q, seq_len_k)
 
     # scale matmul_qk
@@ -58,7 +60,8 @@ def scaled_dot_product_attention(q, k, v, mask):
     scaled_attention_logits = matmul_qk / tf.math.sqrt(dk)
 
     print(scaled_attention_logits.shape, "scaled_attention_shape")
-    # print(mask.shape, "mask shape")
+    mask = mask[:, scaled_attention_logits.shape[1], mask.shape[1]]
+    print(mask.shape, "mask shape")
 
     # add the mask to the scaled tensor.
     if mask is not None:
@@ -143,7 +146,7 @@ class EncoderLayer(tf.keras.layers.Layer):
 
     def call(self, x, training, mask):
         print(x.shape,"mha")
-        attn_output = self.mha(x, x, x, mask=None)  # (batch_size, input_seq_len, d_model)
+        attn_output = self.mha(x, x, x, mask=mask)  # (batch_size, input_seq_len, d_model)
         attn_output = self.dropout1(attn_output, training=training)
         out1 = self.layernorm1(x + attn_output)  # (batch_size, input_seq_len, d_model)
 
@@ -189,7 +192,7 @@ class TransRace(tf.keras.Model):
 
         self.final_layer = tf.keras.layers.Dense(target_size, activation="softmax")
 
-    def call(self, inputs, training=False):
+    def call(self, inputs, training=True):
         inp = inputs
 
         enc_padding_mask = self.create_masks(inp) #, tar
@@ -198,6 +201,7 @@ class TransRace(tf.keras.Model):
         enc_output = self.encoder(inp, training, enc_padding_mask)
 
         final_output = self.final_layer(enc_output)
+        print("final output shape", final_output)
 
         return final_output
     
