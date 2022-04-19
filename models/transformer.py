@@ -22,12 +22,18 @@ def positional_encoding(position, d_model):
 
 def create_padding_mask(seq):
     # seq_len = seq.shape[1]
-    seq = tf.math.equal(seq, -float('inf'))
+    seq = tf.math.equal(seq, 0)#-float('inf')
     seq = tf.cast(tf.math.reduce_any(seq, axis=-1), tf.float32)
+    seq = seq[:, tf.newaxis, tf.newaxis, :]
+    # tmp = seq
+    # for i in range(len(seq)):
+    #     seq = tf.concat([seq,tmp], -1)
+    # seq = tf.transpose(seq)
+    # seq = tf.expand_dims(seq, axis=1)
     print('mask shape after creating', seq.shape)
     # add extra dimensions to add the padding
     # to the attention logits.
-    # (?, 1, 18, 18)
+    # (?, 1, 18)
     return seq #[:, tf.newaxis, tf.newaxis, :]  # (batch_size, 1, 1, seq_len)
 
 # def create_look_ahead_mask(size):
@@ -60,7 +66,6 @@ def scaled_dot_product_attention(q, k, v, mask):
     scaled_attention_logits = matmul_qk / tf.math.sqrt(dk)
 
     print(scaled_attention_logits.shape, "scaled_attention_shape")
-    mask = mask[:, scaled_attention_logits.shape[1], mask.shape[1]]
     print(mask.shape, "mask shape")
 
     # add the mask to the scaled tensor.
@@ -71,7 +76,7 @@ def scaled_dot_product_attention(q, k, v, mask):
     # add up to 1.
     attention_weights = tf.nn.softmax(scaled_attention_logits, axis=-1)  # (..., seq_len_q, seq_len_k)
 
-    output = tf.matmul(attention_weights, v)  # (..., seq_len_q, depth_v)
+    output = tf.matmul(attention_weights, v)  # (..., seq_len_q, depth_v) (..., 18, 140)
 
     return output
 
@@ -128,7 +133,7 @@ class MultiHeadAttention(tf.keras.layers.Layer):
 def point_wise_feed_forward_network(d_model, d_ffn):
     return tf.keras.Sequential([
         tf.keras.layers.Dense(d_ffn, activation='relu'),  # (batch_size, seq_len, d_ffn)
-        tf.keras.layers.Dense(d_model)  # (batch_size, seq_len, d_model)
+        tf.keras.layers.Dense(d_model, activation='relu')  # (batch_size, seq_len, d_model)
     ])
 
 class EncoderLayer(tf.keras.layers.Layer):
@@ -201,7 +206,7 @@ class TransRace(tf.keras.Model):
         enc_output = self.encoder(inp, training, enc_padding_mask)
 
         final_output = self.final_layer(enc_output)
-        print("final output shape", final_output)
+        print("final output shape", final_output.shape)
 
         return final_output
     
