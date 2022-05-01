@@ -31,6 +31,9 @@ from bs4 import BeautifulSoup
 URL = "https://race.netkeiba.com/top/race_list.html"
 WAIT_SECOND = 5
 
+def my_makedirs(path):
+    if not os.path.isdir(path):
+        os.makedirs(path)
 
 def this_week_race_url():
     options = Options()
@@ -38,7 +41,8 @@ def this_week_race_url():
     driver = webdriver.Chrome(options=options, executable_path = '/usr/local/bin/chromedriver') # mac はbrewでインストールしたのでpathはok
     driver.implicitly_wait(5)
     # データ
-    race_url_file = RACR_URL_DIR + "/2021" + "/" + "12_26" + ".txt" #保存先ファイル
+    race_url_file = RACR_URL_DIR + "/2022" + "/" + "5_1" + ".txt" #保存先ファイル
+    my_makedirs( RACR_URL_DIR + "/2022")
     try:
         get_race_url_weekend(driver)
     except ConnectionError:
@@ -49,7 +53,7 @@ def this_week_race_url():
     driver.quit()
 
 def get_race_url_weekend(driver):
-    race_url_file = RACR_URL_DIR + "/2021" + "/" + "12_26" + ".txt" #保存先ファイル
+    race_url_file = RACR_URL_DIR + "/2022" + "/" + "5_1" + ".txt" #保存先ファイル
 
     # URLにアクセス
     wait = WebDriverWait(driver,2)
