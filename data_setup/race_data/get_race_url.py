@@ -37,7 +37,7 @@ def get_race_url():
     driver = webdriver.Chrome(options=options, executable_path = "/usr/local/bin/chromedriver") # mac はbrewでインストールしたのでpathはok
     driver.implicitly_wait(10)
     # 去年までのデータ
-    for year in range(2011, now_datetime.year):
+    for year in range(1986, now_datetime.year):
         for month in range(1, 13):
             race_url_dir = "../data/" + RACR_URL_DIR
             race_url_file = race_url_dir + "/" + str(year) + "-" + str(month) #+ ".txt" #保存先ファイル

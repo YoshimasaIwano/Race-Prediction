@@ -30,7 +30,8 @@ def create_padding_mask(seq):
     #     seq = tf.concat([seq,tmp], -1)
     # seq = tf.transpose(seq)
     # seq = tf.expand_dims(seq, axis=1)
-    print('mask shape after creating', seq.shape)
+#     print('mask shape after creating', seq.shape)
+    
     # add extra dimensions to add the padding
     # to the attention logits.
     # (?, 1, 18)
@@ -58,15 +59,15 @@ def scaled_dot_product_attention(q, k, v, mask):
     output
     """
 
-    print(q.shape,"q_shape")
+#     print(q.shape,"q_shape")
     matmul_qk = tf.matmul(q, k, transpose_b=True)  # (..., seq_len_q, seq_len_k)
 
     # scale matmul_qk
     dk = tf.cast(tf.shape(k)[-1], tf.float32)
     scaled_attention_logits = matmul_qk / tf.math.sqrt(dk)
 
-    print(scaled_attention_logits.shape, "scaled_attention_shape")
-    print(mask.shape, "mask shape")
+#     print(scaled_attention_logits.shape, "scaled_attention_shape")
+#     print(mask.shape, "mask shape")
 
     # add the mask to the scaled tensor.
     if mask is not None:
@@ -102,7 +103,7 @@ class MultiHeadAttention(tf.keras.layers.Layer):
         Transpose the result such that the shape is (batch_size, num_heads, seq_len, depth)
         """
         x = tf.reshape(x, (batch_size, self.seq_len, self.num_heads, self.depth))
-        print(x.shape,"split_head")
+#         print(x.shape,"split_head")
         return tf.transpose(x, perm=[0, 2, 1, 3])
 
     def call(self, v, k, q, mask):
@@ -150,7 +151,7 @@ class EncoderLayer(tf.keras.layers.Layer):
         self.dropout2 = tf.keras.layers.Dropout(rate)
 
     def call(self, x, training, mask):
-        print(x.shape,"mha")
+#         print(x.shape,"mha")
         attn_output = self.mha(x, x, x, mask=mask)  # (batch_size, input_seq_len, d_model)
         attn_output = self.dropout1(attn_output, training=training)
         out1 = self.layernorm1(x + attn_output)  # (batch_size, input_seq_len, d_model)
@@ -206,14 +207,14 @@ class TransRace(tf.keras.Model):
         enc_output = self.encoder(inp, training, enc_padding_mask)
 
         final_output = self.final_layer(enc_output)
-        print("final output shape", final_output.shape)
+#         print("final output shape", final_output.shape)
 
         return final_output
     
     def create_masks(self, inp):#, tar
         # Encoder padding mask
         enc_padding_mask = create_padding_mask(inp)
-        print("mask shape after creating", enc_padding_mask.shape)
+#         print("mask shape after creating", enc_padding_mask.shape)
 
         # Used in the 2nd attention block in the decoder.
         # This padding mask is used to mask the encoder outputs.

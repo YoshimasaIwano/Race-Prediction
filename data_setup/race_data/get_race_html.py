@@ -45,7 +45,7 @@ def my_makedirs(path):
 
 def get_race_html():
     # 去年までのデータ
-    for year in range(2011, now_datetime.year):
+    for year in range(1986, now_datetime.year):
         for month in range(1, 13):
                 get_race_html_by_year_and_mon(year,month)
     # 今年のデータ

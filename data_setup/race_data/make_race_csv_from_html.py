@@ -78,7 +78,7 @@ race_data_columns=[
 def make_race_csv_from_html():
     save_dir = "../data/" + CSV_DIR + "/race_data" 
     my_makedirs(save_dir)
-    for year in range(2011, now_datetime.year+1):
+    for year in range(1986, now_datetime.year+1):
         make_csv_from_html_year(year)
 
 def make_csv_from_html_year(year):
