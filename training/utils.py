@@ -107,3 +107,19 @@ def categorical_focal_loss(alpha, gamma):
         return K.mean(K.sum(loss, axis=-1))
 
     return categorical_focal_loss_fixed
+
+def order_algorithm(preds):
+    num_race = preds.shape[0]
+    y_preds = np.full((num_race, 24), 25)
+    for i in range(num_race):
+        one_race = preds[i,:,:]
+        init_preds = np.argmax(one_race, axis = -1)
+        exist_horse = np.delete(one_race, np.where(init_preds == 25)[0], 0)
+        for j in range(1,exist_horse.shape[0]+1):
+            one_order = np.argmax(exist_horse[:,j])
+            for k in range(one_race.shape[0]):
+                if np.array_equal(one_race[k], exist_horse[one_order]):
+                    y_preds[i][k] = j
+                    exist_horse = np.delete(exist_horse, one_order, 0)
+                    break
+    return y_preds
