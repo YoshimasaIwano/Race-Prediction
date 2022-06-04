@@ -111,15 +111,17 @@ def categorical_focal_loss(alpha, gamma):
 def order_algorithm(preds):
     num_race = preds.shape[0]
     y_preds = np.full((num_race, 24), 25)
-    for i in range(num_race):
-        one_race = preds[i,:,:]
+    for i in range(num_race): # iterate all race
+        one_race = preds[i,:,:] # shape = (24, 26) ,so (num of horse, num of target 0-25)
         init_preds = np.argmax(one_race, axis = -1)
-        exist_horse = np.delete(one_race, np.where(init_preds == 25)[0], 0)
-        for j in range(1,exist_horse.shape[0]+1):
-            one_order = np.argmax(exist_horse[:,j])
-            for k in range(one_race.shape[0]):
+        exist_horse = np.delete(one_race, np.where(init_preds == 25)[0], 0) # shape = (num of exist horse, 26)
+        for j in range(1,exist_horse.shape[0]+1): # iterate 1-num of exist horse
+            one_order = np.argmax(exist_horse[:,j]) # this is a target order
+            for k in range(one_race.shape[0]): # search the horse k = (0, 23)
                 if np.array_equal(one_race[k], exist_horse[one_order]):
                     y_preds[i][k] = j
                     exist_horse = np.delete(exist_horse, one_order, 0)
+                    exist_horse[:,j+1] += exist_horse[:,j]
+                    one_race[:,j+1] += one_race[:,j]
                     break
     return y_preds
