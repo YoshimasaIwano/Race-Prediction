@@ -41,7 +41,7 @@ def this_week_race_url():
     driver = webdriver.Chrome(options=options, executable_path = '/usr/local/bin/chromedriver') # mac はbrewでインストールしたのでpathはok
     driver.implicitly_wait(5)
     # データ
-    race_url_file = RACR_URL_DIR + "/2022" + "/" + "6_4" + ".txt" #保存先ファイル
+    race_url_file = RACR_URL_DIR + "/2022" + "/" + "6_5" + ".txt" #保存先ファイル
     my_makedirs( RACR_URL_DIR + "/2022")
     try:
         get_race_url_weekend(driver)
@@ -53,7 +53,7 @@ def this_week_race_url():
     driver.quit()
 
 def get_race_url_weekend(driver):
-    race_url_file = RACR_URL_DIR + "/2022" + "/" + "6_4" + ".txt" #保存先ファイル
+    race_url_file = RACR_URL_DIR + "/2022" + "/" + "6_5" + ".txt" #保存先ファイル
 
     # URLにアクセス
     wait = WebDriverWait(driver,2)
