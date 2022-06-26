@@ -34,7 +34,7 @@ def makedirs(path):
 def get_race_url():
     options = Options()
     options.add_argument('--headless')
-    driver = webdriver.Chrome(options=options, executable_path = "/usr/local/bin/chromedriver") # mac はbrewでインストールしたのでpathはok
+    driver = webdriver.Chrome(options=options, executable_path = "/usr/bin/chromedriver") # mac はbrewでインストールしたのでpathはok
     driver.implicitly_wait(10)
     # 去年までのデータ
     for year in range(1986, now_datetime.year):

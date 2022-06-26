@@ -79,7 +79,7 @@ horse_data_columns=[
 def make_horse_csv_from_html():
     save_dir = "../data/" + CSV_DIR + "/horse_data" 
     my_makedirs(save_dir)
-    for i in range(63):
+    for i in range(64):
         make_horse_csv_split(i)
 
 def make_horse_csv_split(i):

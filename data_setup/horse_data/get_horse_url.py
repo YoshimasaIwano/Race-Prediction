@@ -34,7 +34,7 @@ def makedirs(path):
 def get_horse_url():
     options = Options()
     options.add_argument('--headless')
-    driver = webdriver.Chrome(options=options, executable_path = '/usr/local/bin/chromedriver') # mac はbrewでインストールしたのでpathはok
+    driver = webdriver.Chrome(options=options, executable_path = '/usr/bin/chromedriver') # mac はbrewでインストールしたのでpathはok
     driver.implicitly_wait(10)
     
     #all horse data
@@ -122,6 +122,7 @@ def get_horse_url_all(driver):
                     f.write(race_href+"\n")
                 try:
                     target = driver.find_elements_by_link_text("次")[0]
+                    time.sleep(1)
                     driver.execute_script("arguments[0].click();", target) #javascriptでクリック処理
                 except IndexError:
                     break
