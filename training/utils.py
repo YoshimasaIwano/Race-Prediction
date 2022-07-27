@@ -113,8 +113,17 @@ def order_algorithm(preds):
     y_preds = np.full((num_race, 24), 25)
     for i in range(num_race): # iterate all race
         one_race = preds[i,:,:] # shape = (24, 26) ,so (num of horse, num of target 0-25)
-        init_preds = np.argmax(one_race, axis = -1)
-        exist_horse = np.delete(one_race, np.where(init_preds == 25)[0], 0) # shape = (num of exist horse, 26)
+        init_preds = np.argmax(one_race, axis = -1) # (24,1)
+#         print(one_race)
+#         print(init_preds)
+        num_exist = len(init_preds)+1
+        for j in reversed(range(len(init_preds))):
+            if (init_preds[j] != 25):
+                num_exist = j+1
+                break
+        exist_horse = one_race[:num_exist,:].copy()
+#         print(exist_horse.shape)
+#         exist_horse = np.delete(one_race, np.where(init_preds == 25)[0], 0) # shape = (num of exist horse, 26)
         for j in range(1,exist_horse.shape[0]+1): # iterate 1-num of exist horse
             one_order = np.argmax(exist_horse[:,j]) # this is a target order
             for k in range(one_race.shape[0]): # search the horse k = (0, 23)

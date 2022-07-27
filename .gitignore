@@ -1,4 +1,5 @@
-.ipynb-checkpoints
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
 __pycache__
 data/*
 models/results/*

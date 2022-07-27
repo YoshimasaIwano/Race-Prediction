@@ -55,13 +55,13 @@ race_data_columns=[
 
 
 def make_csv_from_this_week_html():
-    save_race_csv = CSV_DIR+"/2022"+"/Jun_4/6_26"+".csv"
+    save_race_csv = CSV_DIR+"/2022"+"/Jul_4/7_24"+".csv"
     
     if not ((os.path.isfile(save_race_csv)) ): # まだcsvがなければ生成
         race_df = pd.DataFrame(columns=race_data_columns )
         total = 0
         # race_html/year/month というディレクトリが存在すればappend, なければ何もしない
-        html_dir = RACR_HTML_DIR+"/2022"+"/"+"6_26"
+        html_dir = RACR_HTML_DIR+"/2022"+"/"+"7_24"
         if os.path.isdir(html_dir):
             file_list = os.listdir(html_dir) # get all file names
             total += len(file_list)
@@ -101,11 +101,11 @@ def get_race_data_from_html(race_id, html):
     race_list.append(data_intro_2.find("div", class_="RaceName").get_text().strip("\n")) 
     race_details1 = data_intro_2.find("div", class_="RaceData01").get_text().strip("\n").split("/")
     race_list.append(race_details1[1]) # race_distance
-    race_list.append('晴') # weather
-    race_list.append('良') # ground_condition
+    race_list.append('晴') # weather 曇
+    race_list.append('良') # ground_condition  稍 稍重
     race_list.append(race_details1[0]) # time
     race_details2 = data_intro_2.find("div", class_="RaceData02").get_text().split("\n")
-    race_list.append("2022-6-26") # date
+    race_list.append("2022-7-24") # date
     race_list.append(race_details2[2]) # place
 
     result_rows = soup.find("div", {"class":"RaceTableArea"}).findAll('tr') # レース結果
