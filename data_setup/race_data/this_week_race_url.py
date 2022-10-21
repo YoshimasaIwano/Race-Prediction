@@ -27,6 +27,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
+# import chromedriver_binary
 from bs4 import BeautifulSoup
 URL = "https://race.netkeiba.com/top/race_list.html"
 WAIT_SECOND = 5
@@ -38,10 +39,11 @@ def my_makedirs(path):
 def this_week_race_url():
     options = Options()
     options.add_argument('--headless')
-    driver = webdriver.Chrome(options=options, executable_path = '/usr/bin/chromedriver') # mac はbrewでインストールしたのでpathはok
+#     driver = webdriver.Chrome()
+    driver = webdriver.Chrome(options=options, executable_path = '/usr/local/bin/chromedriver') # mac はbrewでインストールしたのでpathはok
     driver.implicitly_wait(5)
     # データ
-    race_url_file = RACR_URL_DIR + "/2022" + "/" + "7_24" + ".txt" #保存先ファイル
+    race_url_file = RACR_URL_DIR + "/2022" + "/" + "10_16" + ".txt" #保存先ファイル
     my_makedirs( RACR_URL_DIR + "/2022")
     try:
         get_race_url_weekend(driver)
@@ -53,7 +55,7 @@ def this_week_race_url():
     driver.quit()
 
 def get_race_url_weekend(driver):
-    race_url_file = RACR_URL_DIR + "/2022" + "/" + "7_24" + ".txt" #保存先ファイル
+    race_url_file = RACR_URL_DIR + "/2022" + "/" + "10_16" + ".txt" #保存先ファイル
 
     # URLにアクセス
     wait = WebDriverWait(driver,2)

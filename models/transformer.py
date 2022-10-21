@@ -197,19 +197,34 @@ class TransRace(tf.keras.Model):
                                  pe_input, rate)
 
         self.final_layer = tf.keras.layers.Dense(target_size, activation="softmax")
-
-    def call(self, inputs, training=True):
+         
+    def call(self, inputs, training):
         inp = inputs
 
         enc_padding_mask = self.create_masks(inp) #, tar
         # , look_ahead_mask, dec_padding_mask
 
         enc_output = self.encoder(inp, training, enc_padding_mask)
+#         print("enc output shape", enc_output.shape)
 
         final_output = self.final_layer(enc_output)
 #         print("final output shape", final_output.shape)
-
+        
         return final_output
+    
+#     def predict(self, inputs, training):
+#         inp = inputs
+
+#         enc_padding_mask = self.create_masks(inp) #, tar
+#         # , look_ahead_mask, dec_padding_mask
+
+#         enc_output = self.encoder(inp, training, enc_padding_mask)
+# #         print("enc output shape", enc_output.shape)
+
+#         final_output = self.final_layer(enc_output)
+# #         print("final output shape", final_output.shape)
+        
+#         return final_output, enc_output
     
     def create_masks(self, inp):#, tar
         # Encoder padding mask
