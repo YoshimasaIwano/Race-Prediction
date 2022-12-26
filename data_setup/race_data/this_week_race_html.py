@@ -51,8 +51,8 @@ def my_makedirs(path):
 
 
 def this_week_race_html():
-    with open(RACR_URL_DIR + "/2022" + "/"+ "12_11" + ".txt", "r") as f:
-        save_dir = RACR_HTML_DIR + "/2022" + "/12_11" 
+    with open(RACR_URL_DIR + "/2022" + "/"+ "12_25" + ".txt", "r") as f:
+        save_dir = RACR_HTML_DIR + "/2022" + "/12_25" 
         my_makedirs(save_dir)
         urls = f.read().splitlines()
 

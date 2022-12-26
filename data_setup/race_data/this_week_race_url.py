@@ -43,7 +43,7 @@ def this_week_race_url():
     driver = webdriver.Chrome(options=options, executable_path = '/usr/bin/chromedriver') # mac はbrewでインストールしたのでpathはok
     driver.implicitly_wait(5)
     # データ
-    race_url_file = RACR_URL_DIR + "/2022" + "/" + "12_11" + ".txt" #保存先ファイル
+    race_url_file = RACR_URL_DIR + "/2022" + "/" + "12_25" + ".txt" #保存先ファイル
     my_makedirs( RACR_URL_DIR + "/2022")
     try:
         get_race_url_weekend(driver)
@@ -55,7 +55,7 @@ def this_week_race_url():
     driver.quit()
 
 def get_race_url_weekend(driver):
-    race_url_file = RACR_URL_DIR + "/2022" + "/" + "12_11" + ".txt" #保存先ファイル
+    race_url_file = RACR_URL_DIR + "/2022" + "/" + "12_25" + ".txt" #保存先ファイル
 
     # URLにアクセス
     wait = WebDriverWait(driver,2)
@@ -68,11 +68,10 @@ def get_race_url_weekend(driver):
 #     r.html.render()
     
     #日つけ選択
-    terms = driver.find_element_by_xpath("//*[@id='date_list_sub']/li[5]")
-#     terms = driver.find_element_by_xpath("//*[@date='20221113']")
-    terms.send_keys(Keys.TAB)
+    terms = driver.find_element_by_xpath("//*[@date='20221225']")
     terms.click()
-    time.sleep(0.1)
+    wait.until(EC.presence_of_all_elements_located)
+    time.sleep(2)
     
     race_columns = driver.find_elements_by_xpath("//*[@id='RaceTopRace']/div/dl")
     
