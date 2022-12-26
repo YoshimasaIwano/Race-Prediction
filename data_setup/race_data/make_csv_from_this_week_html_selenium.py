@@ -49,8 +49,8 @@ race_data_columns=[
 
 
 
-def make_csv_from_this_week_html_selenium():
-    save_race_csv = CSV_DIR+"/2022"+"/Dec_5/12_25"+".csv"
+def make_csv_from_this_week_html_selenium(week, date, year_date):
+    save_race_csv = CSV_DIR+"/2022"+"/" + week + "/" + date +".csv"
     options = Options()
     options.add_argument('--headless')
     driver = webdriver.Chrome(options=options, executable_path = '/usr/bin/chromedriver') 
@@ -58,13 +58,13 @@ def make_csv_from_this_week_html_selenium():
     
     if not ((os.path.isfile(save_race_csv)) ): # if csv in not created yet
         race_df = pd.DataFrame(columns=race_data_columns )
-        url_dir = RACR_URL_DIR + "/2022/" + "12_25" + ".txt"
+        url_dir = RACR_URL_DIR + "/2022/" + date + ".txt"
         with open(url_dir, "r") as f:
             urls = f.read().splitlines()
             for url in urls:
                 url_arg = url.split("=")
                 race_id = url_arg[-2]                  #get race id
-                race_list = get_race_data_from_html_selenium(driver, race_id, url)     #one race_list  with all horse data
+                race_list = get_race_data_from_html_selenium(driver, race_id, url, year_date)     #one race_list  with all horse data
                 for race in race_list:     #split per horse   [race, horse1] [race, horse2],,,
                     horse_se = pd.Series(race, index=race_df.columns)             
                     race_df = race_df.append(horse_se, ignore_index=True) #complete one month data   [race, horse1]with columns ,,,
@@ -73,7 +73,7 @@ def make_csv_from_this_week_html_selenium():
     driver.close()
     driver.quit()
 
-def get_race_data_from_html_selenium(driver, race_id, url):
+def get_race_data_from_html_selenium(driver, race_id, url, year_date):
     race_list = [race_id]
     # URLにアクセス
     wait = WebDriverWait(driver,10)
@@ -92,7 +92,7 @@ def get_race_data_from_html_selenium(driver, race_id, url):
     race_list.append('良') # ground_condition  
     race_list.append(race_details1[0]) # time
     race_details2 = data_intro_2.find_element(By.CLASS_NAME,"RaceData02").text.split(" ")
-    race_list.append("2022-12-25") # date
+    race_list.append(year_date) # date
     race_list.append(race_details2[1]) # place
 
     result_rows = driver.find_element(By.CLASS_NAME,"RaceTableArea").find_elements_by_tag_name('tr') 

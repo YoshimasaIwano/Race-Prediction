@@ -36,17 +36,17 @@ def my_makedirs(path):
     if not os.path.isdir(path):
         os.makedirs(path)
 
-def this_week_race_url():
+def this_week_race_url(date):
     options = Options()
     options.add_argument('--headless')
 #     driver = webdriver.Chrome()
     driver = webdriver.Chrome(options=options, executable_path = '/usr/bin/chromedriver') # mac はbrewでインストールしたのでpathはok
     driver.implicitly_wait(5)
     # データ
-    race_url_file = RACR_URL_DIR + "/2022" + "/" + "12_25" + ".txt" #保存先ファイル
+    race_url_file = RACR_URL_DIR + "/2022" + "/" + date + ".txt" #保存先ファイル
     my_makedirs( RACR_URL_DIR + "/2022")
     try:
-        get_race_url_weekend(driver)
+        get_race_url_weekend(driver, date)
     except ConnectionError:
         pass
    
@@ -54,8 +54,8 @@ def this_week_race_url():
     driver.close()
     driver.quit()
 
-def get_race_url_weekend(driver):
-    race_url_file = RACR_URL_DIR + "/2022" + "/" + "12_25" + ".txt" #保存先ファイル
+def get_race_url_weekend(driver, date):
+    race_url_file = RACR_URL_DIR + "/2022" + "/" + date + ".txt" #保存先ファイル
 
     # URLにアクセス
     wait = WebDriverWait(driver,2)
@@ -63,15 +63,12 @@ def get_race_url_weekend(driver):
     time.sleep(1)
     wait.until(EC.presence_of_all_elements_located)
     
-#     session = HTMLSession()
-#     r = session.get(URL)
-#     r.html.render()
     
     #日つけ選択
-    terms = driver.find_element_by_xpath("//*[@date='20221225']")
-    terms.click()
-    wait.until(EC.presence_of_all_elements_located)
-    time.sleep(2)
+#     terms = driver.find_element_by_xpath("//*[@date='20221225']")
+#     terms.click()
+#     wait.until(EC.presence_of_all_elements_located)
+#     time.sleep(2)
     
     race_columns = driver.find_elements_by_xpath("//*[@id='RaceTopRace']/div/dl")
     
